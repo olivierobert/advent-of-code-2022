@@ -17,7 +17,6 @@ end
 
 def find_priorities_sum_by_group(input) 
   badges   = []
-  priority_scores = (('a'..'z').to_a + ('A'..'Z').to_a).map.with_index { |value, index| { value => index + 1 } }
 
   input.each_slice(3) do |group|
     rucksack_one, rucksack_two, rucksack_three = group.each { |rucksack| rucksack.gsub!("\n", "") }
