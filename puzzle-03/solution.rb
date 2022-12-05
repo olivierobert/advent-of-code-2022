@@ -1,5 +1,5 @@
 def find_priorities_sum(input) 
-  shared_items   = []
+  shared_items = []
 
   input.each do |line|
     sanitized_line = line.gsub!("\n", "")
@@ -16,7 +16,7 @@ def find_priorities_sum(input)
 end
 
 def find_priorities_sum_by_group(input) 
-  badges   = []
+  badges = []
 
   input.each_slice(3) do |group|
     rucksack_one, rucksack_two, rucksack_three = group.each { |rucksack| rucksack.gsub!("\n", "") }
