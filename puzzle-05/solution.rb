@@ -1,8 +1,8 @@
-def find_top_crates(crate_structure, instructions, is_reverse_order: false) 
+def find_top_crates(crate_structure, instructions, is_reverse_order: false)
   top_crates = []
 
   instructions.each do |line|
-    formatted_line = line.gsub("\n", "").gsub(" ","")
+    formatted_line = line.gsub(" ","")
     instruction_fragments = /move(\d+)from(\d+)to(\d+)/.match(formatted_line)
 
     total_move = instruction_fragments[1].to_i
@@ -25,18 +25,29 @@ def find_top_crates(crate_structure, instructions, is_reverse_order: false)
   pp top_crates
 end
 
-starting_structure = {
-  1 => ["B", "Z", "T"],
-  2 => ["V", "H", "T", "D", "N"],
-  3 => ["B", "F", "M", "D"],
-  4 => ["T", "J", "G", "W", "V", "Q", "L"],
-  5 => ["W", "D", "G", "P", "V", "F", "Q", "M"],
-  6 => ["V", "Z", "Q", "G", "H", "F", "S"],
-  7 => ["Z", "S", "N", "R", "L", "T", "C", "W"],
-  8 => ["Z", "H", "W", "D", "J", "N", "R", "M"],
-  9 => ["M", "Q", "L", "F", "D", "S"]
-}
-instruction_raw = File.readlines("input.txt")
+def generate_stack_structure_from(stack_data)
+  stack_keys = stack_data.pop.split(" ")
+  # Replace empty spaces by 0
+  stack_crates = stack_data.map { |line| line.gsub("    ", "[0] ").gsub(" ", "").gsub("[", "").split("]") }.reverse
+  
+  stacks = stack_keys.reduce ({}) do |stack_structure, stack_key|
+    stack_structure[stack_key.to_i] = []
+    stack_structure
+  end
 
-find_top_crates(starting_structure.dup, instruction_raw, is_reverse_order: true)
-find_top_crates(starting_structure.dup, instruction_raw)
+  stack_crates.each do |stack_crate|
+    stacks.keys.each do |stack_key|
+      crate = stack_crate[stack_key - 1]
+      stacks[stack_key] << crate if crate != "0"
+    end
+  end
+
+  stacks
+end
+
+stack_data, instructions = File.read("input.txt").split("\n\n").map { |content| content.split("\n") }
+
+starting_structure = generate_stack_structure_from(stack_data)
+
+find_top_crates(starting_structure.dup, instructions, is_reverse_order: true)
+find_top_crates(starting_structure.dup, instructions)
