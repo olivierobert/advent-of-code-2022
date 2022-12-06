@@ -4,7 +4,7 @@ def find_marker(input, pattern_size)
   characters_list.each_with_index do |character, index|
     list_to_compare = characters_list.slice((index - (pattern_size - 1))..index)
 
-    if list_to_compare.length == pattern_size && list_to_compare.tally.all? { |key, value| value == 1  }
+    if list_to_compare.length == pattern_size && list_to_compare.tally.all? { _2 == 1 }
       pp index + 1
       break
     end
